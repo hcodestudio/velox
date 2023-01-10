@@ -1,6 +1,6 @@
 # Velox Energy Automated Purchase Request System
 
-------------------------
+
 Prerequesites
 ------------------------
 
@@ -13,7 +13,7 @@ Prerequesites
 3. Clone this repository from the GitHub Desktop app.
 
 
-------------------------
+
 Running the Application
 ------------------------
 
