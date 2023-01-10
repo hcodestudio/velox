@@ -1,0 +1,34 @@
+/* purgecss start ignore */
+@import '_fonts.scss';
+/* purgecss end ignore */
+
+@tailwind base;
+
+body {
+	@apply font-inter tracking-tight;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+.list {
+	text-align: left;
+	max-width: 750px;
+	margin: auto;
+}
+
+.submit-form {
+	max-width: 300px;
+	margin: auto;
+}
+
+.edit-form {
+	max-width: 300px;
+	margin: auto;
+}
+
+.profile-mobile-menu {
+	transform: translate(-130px, -48px);
+	min-height: 3rem;
+	width: 9.375rem;
+}
