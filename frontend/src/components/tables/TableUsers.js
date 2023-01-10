@@ -1,12 +1,5 @@
 import { Link } from 'react-router-dom';
-import {
-	getCoreRowModel,
-	useReactTable,
-	getFilteredRowModel,
-	getSortedRowModel,
-} from '@tanstack/react-table';
-import { toast } from 'react-hot-toast';
-import { AiOutlinePlus, AiOutlineDelete, AiFillDelete } from 'react-icons/ai';
+import { AiOutlinePlus } from 'react-icons/ai';
 
 export default function TableUsers() {
 	return (

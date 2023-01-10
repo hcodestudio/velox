@@ -5,7 +5,6 @@ module.exports = {
 	content: [
 		'./src/**/*.{js,jsx,ts,tsx,html}',
 		'./node_modules/tw-elements/dist/js/**/*.js',
-		'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
 	],
 	theme: {
 		extend: {
@@ -51,6 +50,7 @@ module.exports = {
 					5: 'rgba(15, 98, 254, 0.05)',
 				},
 				bluewood: '#31425b', //
+				botticelli: '#CDD8E4',
 				boulder: '##747474',
 				bridesmaid: '#fee7e5',
 				charade: '#2a3039',
@@ -115,6 +115,7 @@ module.exports = {
 				regentgray: '#8795A1',
 				sanmarino: '#3b64a1',
 				shark: '#313437',
+				silver: '#c0c0c0',
 				shuttlegray: '#5a6872', //
 				sttropaz: '#265397',
 				tamarillo: '#A2191F',
@@ -125,7 +126,8 @@ module.exports = {
 				oxfordblue: '#33404D',
 				linkwater: {
 					DEFAULT: '#E4EDF6', //
-					light: '#FBFCFE', //
+					light: '#FBFCFE', //f1f6fc
+					dark: '#f1f6fc', //f1f6fc
 				},
 			},
 
@@ -313,7 +315,7 @@ module.exports = {
 			boxShadow: {
 				none: 'none',
 				DEFAULT: '0 0 0 1px #cdd8e4, 0 2px 12px rgb(205 216 228 / 50%)',
-				sm: '0 2px 4px 0 rgba(0, 0, 0, 0.5)',
+				sm: 'inset 0 -1px 0 0 rgb(154 165 177 / 25%)',
 				lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
 				'2xl': '0 0 50px 0 rgba(0, 0, 0, 0.1)',
 			},
@@ -475,5 +477,5 @@ module.exports = {
 			width: 'width',
 		},
 	},
-	plugins: [require('tw-elements/dist/plugin'), require('flowbite/plugin')],
+	plugins: [require('tw-elements/dist/plugin')],
 };

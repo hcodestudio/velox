@@ -37,7 +37,7 @@ export default function TopNav() {
 					y: -rect.height,
 					ease: 'sine.in',
 					onComplete: function () {
-						btnDown.classList.remove('bg-white');
+						btnDown.classList.remove('bg-linkwater-dark');
 					},
 				});
 			}
@@ -55,14 +55,14 @@ export default function TopNav() {
 					ease: 'expo.out',
 					y: 0,
 				});
-				btnProfileMenu.classList.add('bg-white');
+				btnProfileMenu.classList.add('bg-linkwater-dark');
 			} else {
 				gsap.to(profileMenuRef.current, {
 					duration: 0.1,
 					ease: 'sine.in',
 					y: -rect.height,
 					onComplete: function () {
-						btnProfileMenu.classList.remove('bg-white');
+						btnProfileMenu.classList.remove('bg-linkwater-dark');
 					},
 				});
 			}
@@ -71,8 +71,8 @@ export default function TopNav() {
 
 	return (
 		<div className="relative shadow-md">
-			<nav className="bg-white h-48 px-24">
-				<div className="bg-white h-full relative z-60">
+			<nav className="bg-linkwater-dark h-48 px-24">
+				<div className="bg-linkwater-dark h-full relative z-60">
 					<div className="mx-auto px-15 md:px-0 flex items-center justify-between flex-wrap h-full">
 						{subpage && (
 							<ul>
@@ -86,10 +86,10 @@ export default function TopNav() {
 								</li>
 							</ul>
 						)}
-						<div className="bg-white w-full h-full hidden flex-grow justify-between lg:flex lg:items-center lg:w-auto">
+						<div className="bg-linkwater-dark w-full h-full hidden flex-grow justify-between lg:flex lg:items-center lg:w-auto">
 							<div className="h-full relative z-60 ml-auto w-150">
 								<button
-									className="text-black text-14 flex bg-white items-center w-full h-full justify-end pr-20"
+									className="text-black text-14 flex bg-linkwater-dark items-center w-full h-full justify-end pr-20"
 									ref={btnProfileMenuRef}
 									onClick={profileToggleMenu}>
 									<span className="mr-5">Honey</span>
@@ -97,10 +97,10 @@ export default function TopNav() {
 							</div>
 							<div className="h-full relative z-50">
 								<button
-									className="text-porcelain text-14 flex bg-white items-center h-full relative z-50"
+									className="text-porcelain text-14 flex bg-linkwater-dark items-center h-full relative z-50"
 									ref={btnDownRef}
 									onClick={profileToggleMenu}>
-									<div className="btn-down bg-white h-full px-5 flex items-center">
+									<div className="btn-down bg-linkwater-dark h-full px-5 flex items-center">
 										<svg
 											width="10"
 											height="6"
@@ -119,7 +119,7 @@ export default function TopNav() {
 									</div>
 								</button>
 								<ul
-									className="profile-mobile-menu z-40 bg-white p-10 absolute h-0x opacity-0x invisiblex shadow-md"
+									className="profile-mobile-menu z-40 bg-linkwater-light p-10 absolute h-0x opacity-0x invisiblex shadow-md"
 									ref={profileMenuRef}>
 									<li>
 										<a

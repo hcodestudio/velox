@@ -9,9 +9,8 @@ export default function Sidebar() {
 		{ title: 'Users', url: `/admin/users` },
 		{ title: 'Purchases', url: `/admin/purchases` },
 		{ title: 'Payments', url: `/admin/payments` },
+		{ title: 'Settings', url: `/admin/settings` },
 	];
-
-	console.log({ page });
 
 	return (
 		<div className="w-300 bg-oxfordblue h-full text-white">

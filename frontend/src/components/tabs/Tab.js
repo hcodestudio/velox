@@ -1,9 +1,9 @@
-export default function Tab({ tabId = '', className, children }) {
+export default function Tab({ tabId = '', className = '', children }) {
 	return (
 		<li className="nav-item" role="presentation">
 			<a
-				className={`nav-link
-        block
+				className={`nav-link h-full
+				flex items-center
         font-medium
         text-xs
         leading-tight
@@ -12,15 +12,13 @@ export default function Tab({ tabId = '', className, children }) {
         px-6
         py-3
         my-2
-        hover:border-transparent hover:bg-gray-100
-        focus:border-transparent
         ${className}`}
-				href={`#${tabId}`}
-				id={`${tabId}-tab`}
+				href={`#tabs-${tabId}`}
+				id={`tabs-${tabId}-tab`}
 				data-bs-toggle="pill"
-				data-bs-target={`#${tabId}`}
+				data-bs-target={`#tabs-${tabId}`}
 				role="tab"
-				aria-controls={tabId}
+				aria-controls={`tabs-${tabId}`}
 				aria-selected="true">
 				{children}
 			</a>
