@@ -14,6 +14,7 @@ Running the Application
 
 1. Import the database. 
    ---- Use DBeaver https://dbeaver.io/
+   
    ---- Download database https://drive.google.com/drive/folders/1ROLWzq6fgiEIy8wyckbvW4AAWq6IxCvf?usp=sharing
 2. In VSCode, hit Terminal and run the following commands.\
 
