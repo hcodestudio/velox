@@ -5,6 +5,7 @@ module.exports = {
 	content: [
 		'./src/**/*.{js,jsx,ts,tsx,html}',
 		'./node_modules/tw-elements/dist/js/**/*.js',
+		'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
 	],
 	theme: {
 		extend: {
@@ -122,7 +123,10 @@ module.exports = {
 				woodsmoke: '#07080A',
 				zircon: '#fcfdff',
 				oxfordblue: '#33404D',
-				linkwater: '#E4EDF6',
+				linkwater: {
+					DEFAULT: '#E4EDF6', //
+					light: '#FBFCFE', //
+				},
 			},
 
 			fontFamily: {
@@ -471,5 +475,5 @@ module.exports = {
 			width: 'width',
 		},
 	},
-	plugins: [require('tw-elements/dist/plugin')],
+	plugins: [require('tw-elements/dist/plugin'), require('flowbite/plugin')],
 };
