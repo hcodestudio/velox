@@ -4,10 +4,10 @@ import thunk from 'redux-thunk';
 
 import reducers, { initialStates } from './reducers';
 
-const { currentUserState, tutorialState } = initialStates;
+const { pagesState, tutorialState } = initialStates;
 
 const initialState = {
-	currentUser: { ...currentUserState },
+	pages: { ...pagesState },
 	tutorials: [...tutorialState],
 };
 

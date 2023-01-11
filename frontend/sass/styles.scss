@@ -34,3 +34,9 @@ body {
 	min-height: 3rem;
 	width: 9.375rem;
 }
+
+h1,
+h2,
+h3 {
+	@apply text-riverbed font-bold;
+}

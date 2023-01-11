@@ -1,17 +1,17 @@
 import { useSelector } from 'react-redux';
 
-import Users from './Users';
-import NewUser from './NewUser';
+import Settings from './Settings';
+import SettingsUsers from './SettingsUsers';
 
 export default function SettingsPages() {
 	const { subpage } = useSelector((state) => state.pages.current);
 
 	switch (subpage) {
 		case undefined:
-			return <Users />;
+			return <Settings />;
 
-		case 'new':
-			return <NewUser />;
+		case 'users':
+			return <SettingsUsers />;
 
 		default:
 			return null;

@@ -239,12 +239,6 @@ const TableUsers = ({ data }) => {
 		debugColumns: false,
 	});
 
-	useEffect(() => {
-		const firstItem = table.getState().columnFilters[0];
-
-		console.log({ firstItem });
-	});
-
 	// useEffect(() => {
 	// 	const firstItem = table.getState().columnFilters[0];
 

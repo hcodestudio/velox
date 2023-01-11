@@ -1,11 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { RxCaretRight } from 'react-icons/rx';
 import gsap from 'gsap';
 
-export default function TopNav() {
-	const { page, subpage } = useParams();
+import Crumbs from './Crumbs';
 
+export default function TopNav() {
 	let profileMenuRef = useRef(null);
 	let btnProfileMenuRef = useRef(null);
 	let btnDownRef = useRef(null);
@@ -74,18 +72,8 @@ export default function TopNav() {
 			<nav className="bg-linkwater-dark h-48 px-24">
 				<div className="bg-linkwater-dark h-full relative z-60">
 					<div className="mx-auto px-15 md:px-0 flex items-center justify-between flex-wrap h-full">
-						{subpage && (
-							<ul>
-								<li>
-									<Link
-										to={`/admin/${page}`}
-										className="text-13 w-full flex items-center text-shuttlegray">
-										{'Users'}
-										<RxCaretRight />
-									</Link>
-								</li>
-							</ul>
-						)}
+						<Crumbs />
+
 						<div className="bg-linkwater-dark w-full h-full hidden flex-grow justify-between lg:flex lg:items-center lg:w-auto">
 							<div className="h-full relative z-60 ml-auto w-150">
 								<button

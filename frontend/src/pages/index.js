@@ -5,6 +5,7 @@ import Dashboard from './dashboard';
 import Payments from './payments';
 import Purchases from './purchases';
 import Users from './users';
+import Settings from './settings';
 
 export default function Pages() {
 	const { page } = useParams();
@@ -25,6 +26,10 @@ export default function Pages() {
 
 		case 'purchases':
 			content = <Purchases />;
+			break;
+
+		case 'settings':
+			content = <Settings />;
 			break;
 
 		default:

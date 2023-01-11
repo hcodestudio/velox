@@ -9,7 +9,7 @@ import { Tab, Tabs, TabContent, TabPanel } from '../../components/tabs';
 import { createUser } from '../../store/actions/users';
 import { currentDateTime } from '../../utilities';
 
-export default function CreateNewUser() {
+export default function NewUser() {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const defaultValues = {};

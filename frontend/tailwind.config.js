@@ -118,6 +118,7 @@ module.exports = {
 				silver: '#c0c0c0',
 				shuttlegray: '#5a6872', //
 				sttropaz: '#265397',
+				riverbed: '#3f4d5a', //
 				tamarillo: '#A2191F',
 				toryblue: '#1746ad', //
 				wildsand: '#f4f4f4',
