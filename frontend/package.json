@@ -43,8 +43,10 @@
 		]
 	},
 	"devDependencies": {
+		"@faker-js/faker": "^7.6.0",
 		"@material-tailwind/html": "^1.2.4",
 		"@reduxjs/toolkit": "^1.9.1",
+		"@tanstack/match-sorter-utils": "^8.7.6",
 		"@tanstack/react-table": "^8.7.6",
 		"autoprefixer": "^10.4.13",
 		"gsap": "file:gsap-bonus.tgz",

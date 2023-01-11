@@ -1,3 +1,6 @@
+import { rankItem, compareItems } from '@tanstack/match-sorter-utils';
+import { sortingFns } from '@tanstack/react-table';
+
 export const convertToTitle = (str = '') => {
 	const arr = str.split(' ');
 
@@ -38,4 +41,48 @@ export const currentDateTime = () => {
 		':' +
 		seconds
 	);
+};
+
+export const fuzzyFilter = (row, columnId, value, addMeta) => {
+	// Rank the item
+	const itemRank = rankItem(row.getValue(columnId), value);
+
+	// Store the itemRank info
+	addMeta({
+		itemRank,
+	});
+
+	// Return if the item should be filtered in/out
+	return itemRank.passed;
+};
+
+export const fuzzySort = (rowA, rowB, columnId) => {
+	let dir = 0;
+
+	// Only sort by rank if the column has ranking information
+	if (rowA.columnFiltersMeta[columnId]) {
+		dir = compareItems(
+			rowA.columnFiltersMeta[columnId]
+				? rowA.columnFiltersMeta[columnId].itemRank
+				: null,
+			rowB.columnFiltersMeta[columnId]
+				? rowB.columnFiltersMeta[columnId].itemRank
+				: null
+		);
+	}
+
+	// Provide an alphanumeric fallback for when the item ranks are equal
+	return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
+};
+
+export const padTo2Digits = (num) => {
+	return num.toString().padStart(2, '0');
+};
+
+export const formatDate = (date) => {
+	return [
+		padTo2Digits(date.getMonth() + 1),
+		padTo2Digits(date.getDate()),
+		date.getFullYear(),
+	].join('/');
 };

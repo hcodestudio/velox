@@ -55,7 +55,7 @@ export default function TopNav() {
 					ease: 'expo.out',
 					y: 0,
 				});
-				btnProfileMenu.classList.add('bg-linkwater-dark');
+				btnProfileMenu.classList.add('bg-linkwater-dark shadow-md');
 			} else {
 				gsap.to(profileMenuRef.current, {
 					duration: 0.1,
@@ -119,7 +119,7 @@ export default function TopNav() {
 									</div>
 								</button>
 								<ul
-									className="profile-mobile-menu z-40 bg-linkwater-light p-10 absolute h-0x opacity-0x invisiblex shadow-md"
+									className="profile-mobile-menu z-40 bg-linkwater-light p-10 absolute h-0x opacity-0x invisiblex shadowx"
 									ref={profileMenuRef}>
 									<li>
 										<a

@@ -11,7 +11,7 @@ export const usersSlice = createSlice({
 	initialState,
 	reducers: {
 		saveUser: (state, action) => {
-			state.users = [...state.users, ...action.payload];
+			state.users = [...state.users, action.payload];
 		},
 		saveUsers: (state, action) => {
 			state.users = [...action.payload];
