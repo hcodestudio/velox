@@ -5,7 +5,7 @@ import Dashboard from './dashboard';
 import Payments from './payments';
 import Purchases from './purchases';
 import Users from './users';
-import Settings from './settings';
+import Settings from './settings/index';
 
 export default function Pages() {
 	const { page } = useParams();
