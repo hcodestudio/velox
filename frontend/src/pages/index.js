@@ -1,11 +1,11 @@
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Layout from '../components/Layout.js';
 import Dashboard from './dashboard';
 import Payments from './payments';
 import Purchases from './purchases';
 import Users from './users';
-import Settings from './settings/index';
+import Settings from './settings';
 
 export default function Pages() {
 	const { page } = useParams();

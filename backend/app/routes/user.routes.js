@@ -2,6 +2,9 @@ var router = require('express').Router();
 
 const users = require('../controllers/user.controller.js');
 
+// Login
+router.post('/auth', users.auth);
+
 // Create a new User
 router.post('/', users.create);
 

@@ -1,9 +1,11 @@
 const sql = require('./db.js');
+const crypto = require('crypto');
 
 // constructor
 const User = function (user) {
+	this.username = user.username;
+	this.password = user.password;
 	this.firstName = user.firstName;
-	this.middleInitial = user.middleInitial;
 	this.lastName = user.lastName;
 	this.jobTitle = user.jobTitle;
 	this.email = user.email;
@@ -21,8 +23,7 @@ User.create = (newUser, result) => {
 			return;
 		}
 
-		console.log('created user: ', { id: res.insertId, ...newUser });
-		result(null, { id: res.insertId, ...newUser });
+		result(null, { id: res.insertId, ...newUser, password: null });
 	});
 };
 
@@ -130,6 +131,35 @@ User.removeAll = (result) => {
 		console.log(`deleted ${res.affectedRows} tutorials`);
 		result(null, res);
 	});
+};
+
+User.authenticate = ({ email, password }, result) => {
+	sql.query(
+		`SELECT id, firstName, lastName, admin, email, jobTitle, username, address FROM velox_users WHERE password="${password}" AND (email = "${email}" OR username = "${email}")`,
+		(err, res) => {
+			if (err) {
+				console.log('error: ', err);
+				result(err, null);
+				return;
+			}
+
+			if (res.length) {
+				console.log('found user: ', res[0]);
+				result(null, res[0]);
+				return;
+			}
+
+			// not found User with the id
+			result({ kind: 'not_found' }, null);
+		}
+	);
+};
+
+//Encrypting text
+User.hashPassword = (password) => {
+	return crypto
+		.pbkdf2Sync(password, '12345', 1000, 64, `sha512`)
+		.toString(`hex`);
 };
 
 module.exports = User;

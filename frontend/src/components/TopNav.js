@@ -1,9 +1,15 @@
 import React, { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import gsap from 'gsap';
 
 import Crumbs from './Crumbs';
+import { removeUserSession } from '../store/actions/users';
 
 export default function TopNav() {
+	const history = useHistory();
+	const dispatch = useDispatch();
+
 	let profileMenuRef = useRef(null);
 	let btnProfileMenuRef = useRef(null);
 	let btnDownRef = useRef(null);
@@ -53,7 +59,7 @@ export default function TopNav() {
 					ease: 'expo.out',
 					y: 0,
 				});
-				btnProfileMenu.classList.add('bg-linkwater-dark shadow-md');
+				btnProfileMenu.classList.add('bg-linkwater-dark');
 			} else {
 				gsap.to(profileMenuRef.current, {
 					duration: 0.1,
@@ -67,13 +73,17 @@ export default function TopNav() {
 		}
 	}
 
+	function handleLogout() {
+		dispatch(removeUserSession());
+		history.push('/');
+	}
+
 	return (
 		<div className="relative shadow-md">
 			<nav className="bg-linkwater-dark h-48 px-24">
 				<div className="bg-linkwater-dark h-full relative z-60">
 					<div className="mx-auto px-15 md:px-0 flex items-center justify-between flex-wrap h-full">
 						<Crumbs />
-
 						<div className="bg-linkwater-dark w-full h-full hidden flex-grow justify-between lg:flex lg:items-center lg:w-auto">
 							<div className="h-full relative z-60 ml-auto w-150">
 								<button
@@ -110,11 +120,11 @@ export default function TopNav() {
 									className="profile-mobile-menu z-40 bg-linkwater-light p-10 absolute h-0x opacity-0x invisiblex shadowx"
 									ref={profileMenuRef}>
 									<li>
-										<a
-											href="/logout"
-											className="inline-block w-full text-black-80 hover:text-black transition-colors duration-300">
+										<button
+											className="inline-block w-full text-black-80 hover:text-black transition-colors duration-300"
+											onClick={() => handleLogout()}>
 											Logout
-										</a>
+										</button>
 									</li>
 								</ul>
 							</div>

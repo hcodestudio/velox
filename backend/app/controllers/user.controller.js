@@ -11,8 +11,9 @@ exports.create = (req, res) => {
 
 	// Create a User
 	const user = new User({
+		username: req.body.username,
+		password: User.hashPassword(req.body.password),
 		firstName: req.body.firstName,
-		middleInitial: req.body.middleInitial,
 		lastName: req.body.lastName,
 		jobTitle: req.body.jobTitle,
 		email: req.body.email,
@@ -34,7 +35,7 @@ exports.create = (req, res) => {
 	});
 };
 
-// Retrieve all Tutorials from the database (with condition).
+// Retrieve all Users from the database (with condition).
 exports.findAll = (req, res) => {
 	const title = req.query.title;
 
@@ -43,7 +44,7 @@ exports.findAll = (req, res) => {
 			res.status(500).send({
 				message:
 					err.message ||
-					'Some error occurred while retrieving tutorials.',
+					'Some error occurred while retrieving users.',
 			});
 		else res.send(data);
 	});
@@ -66,14 +67,14 @@ exports.findOne = (req, res) => {
 	});
 };
 
-// find all published Tutorials
+// find all published Users
 exports.findAllPublished = (req, res) => {
 	User.getAllPublished((err, data) => {
 		if (err)
 			res.status(500).send({
 				message:
 					err.message ||
-					'Some error occurred while retrieving tutorials.',
+					'Some error occurred while retrieving users.',
 			});
 		else res.send(data);
 	});
@@ -122,15 +123,35 @@ exports.delete = (req, res) => {
 	});
 };
 
-// Delete all Tutorials from the database.
+// Delete all Users from the database.
 exports.deleteAll = (req, res) => {
 	User.removeAll((err, data) => {
 		if (err)
 			res.status(500).send({
 				message:
 					err.message ||
-					'Some error occurred while removing all tutorials.',
+					'Some error occurred while removing all users.',
 			});
-		else res.send({ message: `All Tutorials were deleted successfully!` });
+		else res.send({ message: `All Users were deleted successfully!` });
+	});
+};
+
+// Find a single User by credentials
+exports.auth = (req, res) => {
+	const email = req.body.email;
+	const password = User.hashPassword(req.body.password);
+
+	User.authenticate({ email, password }, (err, data) => {
+		if (err) {
+			if (err.kind === 'not_found') {
+				res.send(null);
+			} else {
+				res.status(500).send({
+					message: 'Error retrieving User.',
+				});
+			}
+		} else {
+			res.send(data);
+		}
 	});
 };

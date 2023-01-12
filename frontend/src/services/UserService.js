@@ -1,5 +1,9 @@
 import http from '../http-common';
 
+const auth = (data) => {
+	return http.post('/users/auth', data);
+};
+
 const getAll = () => {
 	return http.get('/users');
 };
@@ -29,6 +33,7 @@ const findByTitle = (title) => {
 };
 
 const UserService = {
+	auth,
 	getAll,
 	get,
 	create,

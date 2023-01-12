@@ -380,6 +380,7 @@ module.exports = {
 				768: '48rem',
 				full: '100%',
 				half: '50%',
+				'3/5': '60%',
 				none: 'none',
 			},
 			minHeight: {
