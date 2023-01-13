@@ -4,11 +4,10 @@ import thunk from 'redux-thunk';
 
 import reducers, { initialStates } from './reducers';
 
-const { pagesState, tutorialState } = initialStates;
+const { pagesState } = initialStates;
 
 const initialState = {
 	pages: { ...pagesState },
-	tutorials: [...tutorialState],
 };
 
 const middleware = [thunk];

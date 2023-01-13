@@ -1,16 +1,16 @@
 import { combineReducers } from 'redux';
-import tutorials, { initialState as tutorialState } from './tutorials';
 import users, { initialState as usersState } from './users';
 import pages, { initialState as pagesState } from './pages';
+import requests, { initialState as requestsState } from './requests';
 
 export default combineReducers({
-	tutorials,
 	pages,
 	users,
+	requests,
 });
 
 export const initialStates = {
-	tutorialState,
 	pagesState,
 	usersState,
+	requestsState,
 };

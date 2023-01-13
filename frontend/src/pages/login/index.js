@@ -16,9 +16,13 @@ export default function Login() {
 	const [showError, setShowError] = useState(false);
 
 	useEffect(() => {
-		console.log({ currentUser });
 		if (currentUser.id) {
-			history.push('/admin/dashboard');
+			console.log({ currentUser });
+			if (currentUser.admin) {
+				history.push('/admin/dashboard');
+			} else {
+				history.push('/user/dashboard');
+			}
 		}
 	});
 

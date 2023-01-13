@@ -68,7 +68,7 @@ module.exports = {
 					70: 'rgba(82, 82, 82, 0.7)',
 				},
 				ebonyclay: {
-					DEFAULT: '#1f2933',
+					DEFAULT: '#29333d',
 					30: 'rgba(40, 51, 61, 0.3)',
 				},
 				fiord: {
@@ -125,6 +125,10 @@ module.exports = {
 				woodsmoke: '#07080A',
 				zircon: '#fcfdff',
 				oxfordblue: '#33404D',
+				hoki: {
+					DEFAULT: '#607D9F',
+					15: 'rgba(96, 125, 159, 0.15)', //
+				},
 				linkwater: {
 					DEFAULT: '#E4EDF6', //
 					light: '#FBFCFE', //f1f6fc
@@ -292,6 +296,10 @@ module.exports = {
 				'full-130': 'calc(100% - 130px)',
 				'3/8': '37.5%',
 				'5/8': '62.5%',
+				'2/5': '40%',
+				'15/100': '15%',
+				'2/10': '20%',
+				'8/10': '80%',
 			},
 			borderRadius: {
 				none: '0',
@@ -340,7 +348,8 @@ module.exports = {
 				30: '1.875rem',
 				36: '2.25rem',
 			},
-			maxHeight: {
+			maxHeight: (theme) => ({
+				...theme('spacing'),
 				0: '0',
 				40: '2.5rem',
 				120: '7.5rem',
@@ -355,7 +364,7 @@ module.exports = {
 				'screen-403': 'calc(100vh - 403px)',
 				full: '100%',
 				screen: '100vh',
-			},
+			}),
 			minWidth: {
 				54: '3.375rem',
 				250: '15.625rem',

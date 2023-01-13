@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import SubLayout from '../../components/SubLayout';
+import Container from '../../containers/Container';
 import TableUsers from '../../containers/tables/TableUsers';
 import { getUsers } from '../../store/actions/users';
 import { convertToTitle } from '../../utilities';
@@ -22,9 +22,9 @@ export default function Users() {
 
 	return (
 		<>
-			<SubLayout pages={pages} title={title}>
+			<Container pages={pages} title={title}>
 				<TableUsers data={allUsers} />
-			</SubLayout>
+			</Container>
 		</>
 	);
 }

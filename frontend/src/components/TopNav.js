@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import gsap from 'gsap';
 
@@ -9,6 +9,7 @@ import { removeUserSession } from '../store/actions/users';
 export default function TopNav() {
 	const history = useHistory();
 	const dispatch = useDispatch();
+	const { firstName } = useSelector((state) => state.users.currentUser);
 
 	let profileMenuRef = useRef(null);
 	let btnProfileMenuRef = useRef(null);
@@ -90,7 +91,7 @@ export default function TopNav() {
 									className="text-black text-14 flex bg-linkwater-dark items-center w-full h-full justify-end pr-20"
 									ref={btnProfileMenuRef}
 									onClick={profileToggleMenu}>
-									<span className="mr-5">Honey</span>
+									<span className="mr-5">{`${firstName}`}</span>
 								</button>
 							</div>
 							<div className="h-full relative z-50">

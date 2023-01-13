@@ -2,9 +2,6 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
-import Tutorial from '../components/Tutorial';
-import TutorialsList from '../components/TutorialsList';
-
 import Pages from '../pages';
 import Login from '../pages/login';
 import Register from '../pages/register';
@@ -26,8 +23,9 @@ export default function Root() {
 			<Route exact path="/register" component={Register} />
 			<Route path="/admin/:page" exact component={Pages} />
 			<Route path="/admin/:page/:subpage" exact component={Pages} />
-			<Route exact path={['/', '/tutorials']} component={TutorialsList} />
-			<Route path="/tutorials/:id" component={Tutorial} />
+			<Route path="/user/:page" exact component={Pages} />
+			<Route path="/user/:page/:subpage" exact component={Pages} />
+			<Route path="/user/:page/:subpage/:edit" exact component={Pages} />
 		</Switch>
 	);
 }
