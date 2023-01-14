@@ -21,11 +21,16 @@ export default function Root() {
 		<Switch>
 			<Route exact path="/" component={Login} />
 			<Route exact path="/register" component={Register} />
-			<Route path="/admin/:page" exact component={Pages} />
-			<Route path="/admin/:page/:subpage" exact component={Pages} />
-			<Route path="/user/:page" exact component={Pages} />
-			<Route path="/user/:page/:subpage" exact component={Pages} />
-			<Route path="/user/:page/:subpage/:edit" exact component={Pages} />
+			<Route path="/:user/:page" exact component={Pages} />
+			<Route path="/:user/:page/:subpage" exact component={Pages} />
+			<Route path="/:user/:page" exact component={Pages} />
+			<Route path="/:user/:page/:subpage" exact component={Pages} />
+			<Route path="/:user/:page/:subpage/:edit" exact component={Pages} />
+			<Route
+				path="/:user/:page/:subpage/:edit/:id"
+				exact
+				component={Pages}
+			/>
 		</Switch>
 	);
 }

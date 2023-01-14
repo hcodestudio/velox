@@ -5,29 +5,23 @@ import { useHistory } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
 import { HiPlus, HiTrash } from 'react-icons/hi2';
 
-import { Tab, Tabs, TabContent, TabPanel } from '../../../components/tabs';
-import InputError from '../../../components/InputError';
-import { currentDateTime } from '../../../utilities';
-import { createPurchaseRequest } from '../../../store/actions/requests';
+import { Tab, Tabs, TabContent, TabPanel } from './tabs';
+import InputError from './InputError';
+import { currentDateTime } from '../utilities';
+import {
+	createPurchaseRequest,
+	updatePurchase,
+} from '../store/actions/requests';
 
-export default function PurchaseNew() {
-	const { admin } = useSelector((state) => state.users.currentUser);
-
+export function FormPurchaseNew() {
 	const dispatch = useDispatch();
-	const history = useHistory();
 	const now = currentDateTime();
-
-	const [success, setSuccess] = useState(false);
 	const [totalCost, setTotalCost] = useState(null);
 
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			if (success) {
-				history.push(`/${admin ? 'admin' : 'user'}/dashboard`);
-			}
-		}, 3000);
-		return () => clearTimeout(timer);
-	}, [admin, history, success]);
+	const history = useHistory();
+	const currentUser = useSelector((state) => state.users.currentUser);
+	const { page, subpage, id } = useSelector((state) => state.pages.current);
+	const user = currentUser.admin ? 'admin' : 'user';
 
 	const defaultFields = {
 		description: '',
@@ -52,37 +46,43 @@ export default function PurchaseNew() {
 	});
 
 	const onSubmit = (formData) => {
-		setSuccess(false);
-
-		const total = formData.items.reduce(
-			(sum, { estimatedCost }) => sum + Number(estimatedCost),
-			0
-		);
-
 		const data = {
 			...formData,
 			dateCreated: now,
 			dateUpdated: now,
 			subsidiaryId: null,
 			vendorId: null,
-			requestorId: 39,
-			totalAmount: total.toFixed(2),
-			paymentMethod: 'cash',
+			requestorId: currentUser.id,
 			receivedBy: null,
 			approvedBy: null,
 			budgetCategory: 'budgeted',
 			status: 'pending',
 		};
 
-		const res = dispatch(createPurchaseRequest(data));
+		let res;
+
+		if (!id) {
+			res = dispatch(createPurchaseRequest(data));
+		} else {
+			res = dispatch(updatePurchase(id, data));
+		}
 
 		toast.promise(res, {
-			loading: 'Sending purchase request...',
+			loading: `${id ? 'Updating' : 'Sending'} purchase request...`,
 			success: () => {
-				setSuccess(true);
-				return <p>Successfully sent purchase request.</p>;
+				setTimeout(() => {
+					history.push(`/${user}/${page}/${subpage}`);
+				}, 2000);
+
+				return (
+					<p>{`Successfully ${
+						id ? 'updated' : 'sent'
+					} purchase request.`}</p>
+				);
 			},
-			error: <b>Could not send purchase request.</b>,
+			error: (
+				<b>{`Could not ${id ? 'update' : 'send'} purchase request.`}</b>
+			),
 		});
 	};
 
@@ -118,7 +118,7 @@ export default function PurchaseNew() {
 	}
 
 	return (
-		<div className="container mx-auto mt-30">
+		<>
 			<form onSubmit={handleSubmit(onSubmit)} noValidate>
 				<div className="flex items-center mb-20">
 					<button
@@ -128,7 +128,7 @@ export default function PurchaseNew() {
 					</button>
 				</div>
 				<div className="flex items-start">
-					<div className="shadow bg-white rounded-8 overflow-hidden w-8/10 mr-30">
+					<div className="shadow bg-white rounded-8 overflow-hidden w-7/10 mr-30">
 						<Tabs className="bg-linkwater-dark px-32 pt-8 h-48 shadow-sm">
 							<Tab className="active px-12" tabId="account">
 								Content
@@ -432,7 +432,7 @@ export default function PurchaseNew() {
 							</TabPanel>
 						</TabContent>
 					</div>
-					<div className="shadow bg-white rounded-8 overflow-hidden w-2/10 px-32 py-15">
+					<div className="shadow bg-white rounded-8 overflow-hidden w-3/10 px-32 py-15">
 						<div className="flex items-center">
 							<p className="w-1/2 font-semibold">Total </p>
 							<p className="w-1/2">{totalCost}</p>
@@ -440,7 +440,7 @@ export default function PurchaseNew() {
 					</div>
 				</div>
 			</form>
-			<Toaster position="top-center" reverseOrder={false} />
-		</div>
+			<Toaster />
+		</>
 	);
 }

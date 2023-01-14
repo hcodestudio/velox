@@ -21,7 +21,7 @@ export default function UserNew() {
 			if (success) {
 				history.push(`/admin/users`);
 			}
-		}, 3000);
+		}, 1500);
 		return () => clearTimeout(timer);
 	}, [history, success]);
 
@@ -241,7 +241,7 @@ export default function UserNew() {
 									/>
 									<InputError error={errors.address} />
 								</div>
-								<div className="mb-10">
+								{/* <div className="mb-10">
 									<label
 										htmlFor="address"
 										className="w-1/3 ml-auto text-13 font-medium">
@@ -253,7 +253,7 @@ export default function UserNew() {
 										<option value="female">female</option>
 										<option value="male">male</option>
 									</select>
-								</div>
+								</div> */}
 							</div>
 						</TabPanel>
 						<TabPanel tabId="permissions">

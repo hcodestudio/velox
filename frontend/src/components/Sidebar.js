@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AiFillDashboard } from 'react-icons/ai';
 import { IoIosCopy } from 'react-icons/io';
-import { FaCog } from 'react-icons/fa';
 import { BsFillPeopleFill } from 'react-icons/bs';
 import { HiClipboardDocumentList } from 'react-icons/hi2';
 import { MdPayments } from 'react-icons/md';

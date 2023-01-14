@@ -5,6 +5,8 @@ const crypto = require('crypto');
 const Purchase = function (purchase) {
 	this.subsidiaryId = purchase.subsidiaryId;
 	this.vendorId = purchase.vendorId;
+	this.vendor = purchase.vendor;
+	this.costCenter = purchase.costCenter;
 	this.purpose = purchase.purpose;
 	this.terms = purchase.terms;
 	this.budgetCategory = purchase.budgetCategory;
@@ -44,12 +46,39 @@ Purchase.insertBulk = (data, result) => {
 	);
 };
 
+Purchase.findById = (id, result) => {
+	sql.query(
+		`SELECT requests.*, users.firstName, users.lastName FROM velox_purchase_requests as requests INNER JOIN velox_users as users WHERE requests.id = ${id} AND requests.requestorId = users.id`,
+		(err, res) => {
+			if (err) {
+				console.log('error: ', err);
+				result(err, null);
+				return;
+			}
+
+			if (res.length) {
+				console.log('found purchase: ', res[0]);
+				result(null, res[0]);
+				return;
+			}
+
+			// not found Purchase with the id
+			result({ kind: 'not_found' }, null);
+		}
+	);
+};
+
 Purchase.getAll = (title, result) => {
-	let query = 'SELECT * FROM velox_users';
+	let query =
+		'SELECT a.*, b.firstName, b.lastName FROM velox_purchase_requests a, velox_users b';
+
+	query += ` WHERE a.requestorId = b.id`;
 
 	if (title) {
 		query += ` WHERE title LIKE '%${title}%'`;
 	}
+
+	query += ` ORDER BY a.id DESC`;
 
 	sql.query(query, (err, res) => {
 		if (err) {
@@ -58,47 +87,73 @@ Purchase.getAll = (title, result) => {
 			return;
 		}
 
-		console.log('tutorials: ', res);
+		console.log('purchases: ', res);
 		result(null, res);
 	});
 };
 
-Purchase.findById = (id, result) => {
-	sql.query(`SELECT * FROM tutorials WHERE id = ${id}`, (err, res) => {
-		if (err) {
-			console.log('error: ', err);
-			result(err, null);
-			return;
-		}
+Purchase.getAllById = (id, result) => {
+	let query =
+		'SELECT a.*, b.firstName, b.lastName FROM velox_purchase_requests a, velox_users b';
 
-		if (res.length) {
-			console.log('found purchase: ', res[0]);
-			result(null, res[0]);
-			return;
-		}
+	query += ` WHERE a.requestorId = b.id AND a.requestorId = ${id}`;
+	query += ` ORDER BY a.id DESC`;
 
-		// not found Purchase with the id
-		result({ kind: 'not_found' }, null);
-	});
-};
-
-Purchase.getAllPublished = (result) => {
-	sql.query('SELECT * FROM tutorials WHERE published=true', (err, res) => {
+	sql.query(query, (err, res) => {
 		if (err) {
 			console.log('error: ', err);
 			result(null, err);
 			return;
 		}
 
-		console.log('tutorials: ', res);
+		console.log('purchases: ', res);
 		result(null, res);
 	});
 };
 
+Purchase.getAllPurchaseItems = (id, result) => {
+	sql.query(
+		` SELECT * FROM velox_purchase_request_items as items WHERE items.purchaseId = ${id}`,
+		(err, res) => {
+			if (err) {
+				console.log('error: ', err);
+				result(null, err);
+				return;
+			}
+
+			console.log('tutorials: ', res);
+			result(null, res);
+		}
+	);
+};
+
 Purchase.updateById = (id, purchase, result) => {
 	sql.query(
-		'UPDATE tutorials SET title = ?, description = ?, published = ? WHERE id = ?',
-		[purchase.title, purchase.description, purchase.published, id],
+		'UPDATE velox_purchase_requests SET terms = ?, purpose = ? WHERE id = ?',
+		[purchase.terms, purchase.purpose, id],
+		(err, res) => {
+			if (err) {
+				console.log('error: ', err);
+				result(null, err);
+				return;
+			}
+
+			if (res.affectedRows == 0) {
+				// not found Purchase with the id
+				result({ kind: 'not_found' }, null);
+				return;
+			}
+
+			console.log('updated purchase: ', { id: id, ...purchase });
+			result(null, { id: id, ...purchase });
+		}
+	);
+};
+
+Purchase.approveById = (id, purchase, result) => {
+	sql.query(
+		'UPDATE velox_purchase_requests SET status = ?, dateUpdated = ? WHERE id = ?',
+		[purchase.status, purchase.dateUpdated, id],
 		(err, res) => {
 			if (err) {
 				console.log('error: ', err);
@@ -148,35 +203,6 @@ Purchase.removeAll = (result) => {
 		console.log(`deleted ${res.affectedRows} tutorials`);
 		result(null, res);
 	});
-};
-
-Purchase.authenticate = ({ email, password }, result) => {
-	sql.query(
-		`SELECT id, firstName, lastName, admin, email, jobTitle, username, address FROM velox_users WHERE password="${password}" AND (email = "${email}" OR username = "${email}")`,
-		(err, res) => {
-			if (err) {
-				console.log('error: ', err);
-				result(err, null);
-				return;
-			}
-
-			if (res.length) {
-				console.log('found purchase: ', res[0]);
-				result(null, res[0]);
-				return;
-			}
-
-			// not found Purchase with the id
-			result({ kind: 'not_found' }, null);
-		}
-	);
-};
-
-//Encrypting text
-Purchase.hashPassword = (password) => {
-	return crypto
-		.pbkdf2Sync(password, '12345', 1000, 64, `sha512`)
-		.toString(`hex`);
 };
 
 module.exports = Purchase;

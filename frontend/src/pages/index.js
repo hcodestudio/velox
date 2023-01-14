@@ -5,8 +5,6 @@ import Layout from '../components/Layout.js';
 import DashboardAdmin from './dashboard/admin';
 import DashboardUser from './dashboard/user';
 import Requests from './requests';
-import Payments from './payments';
-import Purchases from './purchases';
 import Users from './users';
 import Settings from './settings';
 
@@ -31,14 +29,6 @@ export default function Pages() {
 
 		case 'requests':
 			content = <Requests />;
-			break;
-
-		case 'payments':
-			content = <Payments />;
-			break;
-
-		case 'purchases':
-			content = <Purchases />;
 			break;
 
 		case 'settings':

@@ -43,6 +43,18 @@ export const currentDateTime = () => {
 	);
 };
 
+export const padTo2Digits = (num) => {
+	return num.toString().padStart(2, '0');
+};
+
+export const formatDate = (date) => {
+	return [
+		padTo2Digits(date.getMonth() + 1),
+		padTo2Digits(date.getDate()),
+		date.getFullYear(),
+	].join('/');
+};
+
 export const fuzzyFilter = (row, columnId, value, addMeta) => {
 	// Rank the item
 	const itemRank = rankItem(row.getValue(columnId), value);
@@ -73,16 +85,4 @@ export const fuzzySort = (rowA, rowB, columnId) => {
 
 	// Provide an alphanumeric fallback for when the item ranks are equal
 	return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
-};
-
-export const padTo2Digits = (num) => {
-	return num.toString().padStart(2, '0');
-};
-
-export const formatDate = (date) => {
-	return [
-		padTo2Digits(date.getMonth() + 1),
-		padTo2Digits(date.getDate()),
-		date.getFullYear(),
-	].join('/');
 };

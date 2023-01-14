@@ -13,6 +13,8 @@ exports.create = (req, res) => {
 	const purchase = new Purchase({
 		subsidiaryId: req.body.subsidiaryId,
 		vendorId: req.body.vendorId,
+		vendor: req.body.vendor,
+		costCenter: req.body.costCenter,
 		purpose: req.body.purpose,
 		terms: req.body.terms,
 		budgetCategory: req.body.budgetCategory,
@@ -75,6 +77,19 @@ exports.findAll = (req, res) => {
 	});
 };
 
+// Retrieve all Purchases from the database (with condition).
+exports.findAllById = (req, res) => {
+	Purchase.getAllById(req.params.id, (err, data) => {
+		if (err)
+			res.status(500).send({
+				message:
+					err.message ||
+					'Some error occurred while retrieving purchases.',
+			});
+		else res.send(data);
+	});
+};
+
 // Find a single Purchase by Id
 exports.findOne = (req, res) => {
 	Purchase.findById(req.params.id, (err, data) => {
@@ -93,16 +108,21 @@ exports.findOne = (req, res) => {
 	});
 };
 
-// find all published Purchases
-exports.findAllPublished = (req, res) => {
-	Purchase.getAllPublished((err, data) => {
-		if (err)
-			res.status(500).send({
-				message:
-					err.message ||
-					'Some error occurred while retrieving purchases.',
-			});
-		else res.send(data);
+// Find a single Purchase by Id
+exports.findAllItems = (req, res) => {
+	Purchase.getAllPurchaseItems(req.params.id, (err, data) => {
+		if (err) {
+			if (err.kind === 'not_found') {
+				res.status(404).send({
+					message: `Not found Purchase with id ${req.params.id}.`,
+				});
+			} else {
+				res.status(500).send({
+					message:
+						'Error retrieving Purchase with id ' + req.params.id,
+				});
+			}
+		} else res.send(data);
 	});
 };
 
@@ -118,6 +138,28 @@ exports.update = (req, res) => {
 	console.log(req.body);
 
 	Purchase.updateById(req.params.id, new Purchase(req.body), (err, data) => {
+		if (err) {
+			if (err.kind === 'not_found') {
+				res.status(404).send({
+					message: `Not found Purchase with id ${req.params.id}.`,
+				});
+			} else {
+				res.status(500).send({
+					message: 'Error updating Purchase with id ' + req.params.id,
+				});
+			}
+		} else res.send(data);
+	});
+};
+
+exports.approve = (req, res) => {
+	if (!req.body) {
+		res.status(400).send({
+			message: 'Content can not be empty!',
+		});
+	}
+
+	Purchase.approveById(req.params.id, new Purchase(req.body), (err, data) => {
 		if (err) {
 			if (err.kind === 'not_found') {
 				res.status(404).send({
@@ -160,25 +202,5 @@ exports.deleteAll = (req, res) => {
 					'Some error occurred while removing all purchases.',
 			});
 		else res.send({ message: `All Purchases were deleted successfully!` });
-	});
-};
-
-// Find a single Purchase by credentials
-exports.auth = (req, res) => {
-	const email = req.body.email;
-	const password = Purchase.hashPassword(req.body.password);
-
-	Purchase.authenticate({ email, password }, (err, data) => {
-		if (err) {
-			if (err.kind === 'not_found') {
-				res.send(null);
-			} else {
-				res.status(500).send({
-					message: 'Error retrieving Purchase.',
-				});
-			}
-		} else {
-			res.send(data);
-		}
 	});
 };
