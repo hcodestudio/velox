@@ -6,7 +6,7 @@ import { convertToTitle } from '../utilities';
 
 export default function Crumbs() {
 	const { admin } = useSelector((state) => state.users.currentUser);
-	const { page, subpage } = useSelector((state) => state.pages.current);
+	const { page, subpage, edit } = useSelector((state) => state.pages.current);
 	const user = admin ? 'admin' : 'user';
 
 	const crumbs = subpage ? (
@@ -22,7 +22,9 @@ export default function Crumbs() {
 			{subpage && subpage !== 'new' ? (
 				<li>
 					<Link
-						to={`/${user}/${page}/${subpage}`}
+						to={`/${user}/${page}/${subpage}${
+							edit ? `/${edit}` : ''
+						}`}
 						className="text-13 w-full flex items-center text-shuttlegray">
 						{convertToTitle(subpage)}
 						<RxCaretRight />

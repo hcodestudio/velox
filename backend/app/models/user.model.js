@@ -1,5 +1,10 @@
 const sql = require('./db.js');
 const crypto = require('crypto');
+const iterations = 4096;
+const keylen = 32;
+const randomDataSize = 16;
+const pwd = 'myPwd';
+const salt = 'secretK3yV3loX!';
 
 // constructor
 const User = function (user) {
@@ -23,12 +28,29 @@ User.create = (newUser, result) => {
 			return;
 		}
 
-		result(null, { id: res.insertId, ...newUser, password: null });
+		result(null, { id: res.insertId, password: null });
 	});
 };
 
-User.getAll = (title, result) => {
-	let query = 'SELECT * FROM velox_users';
+User.saveUsersUserGroups = (data, result) => {
+	sql.query(
+		'INSERT INTO velox_usergroups_users (groupId, userId, dateCreated, dateUpdated) VALUES ?',
+		[data],
+		(err, res) => {
+			if (err) {
+				console.log('error: ', err);
+				result(err, null);
+				return;
+			}
+
+			result(null, { id: res.insertId });
+		}
+	);
+};
+
+User.getAllUsers = (title, result) => {
+	let query =
+		'SELECT id, username, firstName, lastName, jobTitle, dateCreated, dateUpdated FROM velox_users';
 
 	if (title) {
 		query += ` WHERE title LIKE '%${title}%'`;
@@ -46,27 +68,14 @@ User.getAll = (title, result) => {
 	});
 };
 
-User.findById = (id, result) => {
-	sql.query(`SELECT * FROM tutorials WHERE id = ${id}`, (err, res) => {
-		if (err) {
-			console.log('error: ', err);
-			result(err, null);
-			return;
-		}
+User.getAllUserGroups = (handle, result) => {
+	let query = 'SELECT * FROM velox_usergroups';
 
-		if (res.length) {
-			console.log('found user: ', res[0]);
-			result(null, res[0]);
-			return;
-		}
+	if (handle) {
+		query += ` WHERE handle LIKE '%${handle}%'`;
+	}
 
-		// not found User with the id
-		result({ kind: 'not_found' }, null);
-	});
-};
-
-User.getAllPublished = (result) => {
-	sql.query('SELECT * FROM tutorials WHERE published=true', (err, res) => {
+	sql.query(query, (err, res) => {
 		if (err) {
 			console.log('error: ', err);
 			result(null, err);
@@ -75,6 +84,45 @@ User.getAllPublished = (result) => {
 
 		console.log('tutorials: ', res);
 		result(null, res);
+	});
+};
+
+User.findUserById = (id, result) => {
+	sql.query(`SELECT * FROM velox_users WHERE id = ${id}`, (err, res) => {
+		if (err) {
+			console.log('error: ', err);
+			result(err, null);
+			return;
+		}
+
+		if (res.length) {
+			const user = res[0];
+			let userGroups = [];
+
+			// get usergroups
+			sql.query(
+				`SELECT * FROM velox_usergroups_users WHERE userId = ${id}`,
+				(err, res) => {
+					if (err) {
+						console.log('error: ', err);
+						result(err, null);
+						return;
+					}
+
+					if (res.length) {
+						// get usergroups
+						console.log('found user: ', user);
+
+						userGroups = res.map((group) => [group.groupId]);
+
+						result(null, { ...user, userGroups });
+						return;
+					}
+					// not found User with the id
+					result({ kind: 'not_found' }, null);
+				}
+			);
+		}
 	});
 };
 
@@ -156,10 +204,24 @@ User.authenticate = ({ email, password }, result) => {
 };
 
 //Encrypting text
-User.hashPassword = (password) => {
-	return crypto
-		.pbkdf2Sync(password, '12345', 1000, 64, `sha512`)
-		.toString(`hex`);
+User.encryptPassword = (password) => {
+	let key = crypto.pbkdf2Sync(pwd, salt, iterations, keylen, `sha512`);
+	let iv = crypto.randomBytes(randomDataSize);
+	let c = crypto.createCipheriv('aes-256-cfb', key, iv);
+
+	let buffers = [c.update(new Buffer(password)), c.final()];
+	return Buffer.concat(buffers).toString('base64');
+};
+
+User.decryptPassword = (encrypted) => {
+	let key = crypto.pbkdf2Sync(pwd, salt, iterations, keylen, `sha512`);
+	let iv = crypto.randomBytes(randomDataSize);
+	let c = crypto.createDecipheriv('aes-256-cfb', key, iv);
+
+	let decrypted = c.update(new Buffer(encrypted, 'base64'));
+	c.final();
+
+	return decrypted.toString();
 };
 
 module.exports = User;

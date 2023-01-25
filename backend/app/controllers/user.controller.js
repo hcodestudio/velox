@@ -12,7 +12,7 @@ exports.create = (req, res) => {
 	// Create a User
 	const user = new User({
 		username: req.body.username,
-		password: User.hashPassword(req.body.password),
+		password: User.encryptPassword(req.body.password),
 		firstName: req.body.firstName,
 		lastName: req.body.lastName,
 		jobTitle: req.body.jobTitle,
@@ -31,15 +31,51 @@ exports.create = (req, res) => {
 					err.message ||
 					'Some error occurred while creating the User.',
 			});
-		else res.send(data);
+		else {
+			const userData = data;
+
+			const insertData = req.body.userGroups.map((groupId) => [
+				groupId,
+				data.id,
+				req.body.dateCreated,
+				req.body.dateUpdated,
+			]);
+
+			// save user's usergroup
+			User.saveUsersUserGroups(insertData, (err, data) => {
+				if (err)
+					res.status(500).send({
+						message:
+							err.message ||
+							'Some error occurred while saving user`s usergroups.',
+					});
+				else {
+					res.send({ ...req.body, ...userData });
+				}
+			});
+		}
 	});
 };
 
 // Retrieve all Users from the database (with condition).
-exports.findAll = (req, res) => {
+exports.getAllUsers = (req, res) => {
 	const title = req.query.title;
 
-	User.getAll(title, (err, data) => {
+	User.getAllUsers(title, (err, data) => {
+		if (err)
+			res.status(500).send({
+				message:
+					err.message ||
+					'Some error occurred while retrieving users.',
+			});
+		else res.send(data);
+	});
+};
+
+exports.getAllUserGroups = (req, res) => {
+	const handle = req.query.handle;
+
+	User.getAllUserGroups(handle, (err, data) => {
 		if (err)
 			res.status(500).send({
 				message:
@@ -51,8 +87,8 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single User by Id
-exports.findOne = (req, res) => {
-	User.findById(req.params.id, (err, data) => {
+exports.findUserById = (req, res) => {
+	User.findUserById(req.params.id, (err, data) => {
 		if (err) {
 			if (err.kind === 'not_found') {
 				res.status(404).send({
@@ -63,7 +99,12 @@ exports.findOne = (req, res) => {
 					message: 'Error retrieving User with id ' + req.params.id,
 				});
 			}
-		} else res.send(data);
+		} else {
+			console;
+			const password = User.decryptPassword(data.password);
+
+			res.send({ ...data, password, confirmPassword: password });
+		}
 	});
 };
 
@@ -139,7 +180,7 @@ exports.deleteAll = (req, res) => {
 // Find a single User by credentials
 exports.auth = (req, res) => {
 	const email = req.body.email;
-	const password = User.hashPassword(req.body.password);
+	const password = User.encryptPassword(req.body.password);
 
 	User.authenticate({ email, password }, (err, data) => {
 		if (err) {

@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
 import { HiPlus, HiTrash } from 'react-icons/hi2';
 
-import { Tab, Tabs, TabContent, TabPanel } from './tabs';
-import InputError from './InputError';
-import { currentDateTime } from '../utilities';
+import { Tab, Tabs, TabContent, TabPanel } from '../tabs';
+import InputError from '../InputError';
+import { currentDateTime } from '../../utilities';
 import {
 	createPurchaseRequest,
 	updatePurchase,
-} from '../store/actions/requests';
+} from '../../store/actions/requests';
 
-export function FormPurchaseNew() {
+export function FormNewPurchase() {
 	const dispatch = useDispatch();
 	const now = currentDateTime();
 	const [totalCost, setTotalCost] = useState(null);

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AiFillDashboard } from 'react-icons/ai';
 import { IoIosCopy } from 'react-icons/io';
+import { FaCog } from 'react-icons/fa';
 import { BsFillPeopleFill } from 'react-icons/bs';
 import { HiClipboardDocumentList } from 'react-icons/hi2';
 import { MdPayments } from 'react-icons/md';
@@ -47,12 +48,12 @@ export default function Sidebar() {
 				},
 			],
 		},
-		// {
-		// 	title: 'Settings',
-		// 	url: `/${role}/settings`,
-		// 	show: admin ? true : false,
-		// 	icon: <FaCog className="mr-2 w-25 h-16" />,
-		// },
+		{
+			title: 'Settings',
+			url: `/${role}/settings`,
+			show: admin ? true : false,
+			icon: <FaCog className="mr-2 w-25 h-16" />,
+		},
 	];
 
 	const showItems = items.filter((item) => item.show);

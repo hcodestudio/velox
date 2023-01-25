@@ -4,8 +4,8 @@ const auth = (data) => {
 	return http.post('/users/auth', data);
 };
 
-const getAll = () => {
-	return http.get('/users');
+const getAll = (type) => {
+	return http.get(`/users/all-${type}`);
 };
 
 const get = (id) => {

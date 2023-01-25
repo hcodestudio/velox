@@ -1,16 +1,26 @@
 import { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-import Table from '../../components/Table';
+import Table from '../../components/tables/Table';
 import useTable from '../../hooks/useTable';
 import { formatDate, fuzzySort } from '../../utilities';
 
 const TableUsers = ({ data }) => {
+	const { admin } = useSelector((state) => state.users.currentUser);
+	const { page } = useParams();
+	const user = admin ? 'admin' : 'user';
+
 	const columns = useMemo(
 		() => [
 			{
-				accessorFn: (row) => `${row.firstName} ${row.lastName}`,
+				accessorFn: (row) => (
+					<Link
+						to={`/${user}/${page}/edit/${row.id}`}
+						className="text-blue-600 hover:underline">{`${row.firstName} ${row.lastName}`}</Link>
+				),
 				id: 'fullName',
 				header: 'Full Name',
 				cell: (info) => info.getValue(),
@@ -37,7 +47,7 @@ const TableUsers = ({ data }) => {
 				sortingFn: fuzzySort,
 			},
 		],
-		[]
+		[page, user]
 	);
 
 	const { DebouncedInput, setGlobalFilter, globalFilter, table } = useTable({

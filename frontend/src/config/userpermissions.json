@@ -1,0 +1,57 @@
+{
+	"permissions": [
+		{ "id": "registerUsers", "title": "Register users" },
+		{ "id": "createPRs", "title": "Create purchase requests" },
+		{ "id": "createRFPs", "title": "Create request for payments" },
+		{ "id": "reviewPRs", "title": "Review purchase requests" },
+		{ "id": "reviewRFPs", "title": "Review request for payments" },
+		{ "id": "approvePRs", "title": "Approve purchase requests" },
+		{
+			"id": "approveRFPs",
+			"title": "Approve request for payments"
+		},
+		{ "id": "signRFPs", "title": "Sign request for payments" }
+	],
+	"userGroups": [
+		{
+			"id": "requestor",
+			"title": "Requestor",
+			"premissions": ["createPRs", "createRFPs"]
+		},
+		{
+			"id": "recommendingApproval",
+			"title": "Recommending Approval",
+			"premissions": ["reviewPRs", "reviewRFPs", "approvePRs"]
+		},
+		{
+			"id": "finalApproval",
+			"title": "Final Approval",
+			"premissions": ["reviewPRs", "reviewRFPs", "approvePRs"]
+		},
+		{
+			"id": "accountingAssociate",
+			"title": "Accounting Associate",
+			"premissions": ["reviewPRs", "reviewRFPs", "approvePRs"]
+		},
+		{
+			"id": "accountingSupervisor",
+			"title": "Accounting Supervisor",
+			"premissions": ["reviewPRs", "reviewRFPs", "approvePRs"]
+		},
+		{
+			"id": "disbursementAssociate",
+			"title": "Disbursement Associate",
+			"premissions": ["reviewPRs", "reviewRFPs", "approvePRs"]
+		},
+		{
+			"id": "cashManagementSupervisor",
+			"title": "Cash Management Supervisor",
+			"premissions": ["reviewPRs", "reviewRFPs", "approvePRs"]
+		},
+		{
+			"id": "manager",
+			"title": "Manager",
+			"premissions": ["reviewPRs", "reviewRFPs", "approvePRs", "signRFPs"]
+		}
+	]
+}

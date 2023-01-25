@@ -1,10 +1,19 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { getUserGroups } from '../../store/actions/users';
 
 import Users from './Users';
+import UserEdit from './UserEdit';
 import UserNew from './UserNew';
 
-export default function SettingsPages() {
+export default function UserPages() {
+	const dispatch = useDispatch();
 	const { subpage } = useSelector((state) => state.pages.current);
+
+	useEffect(() => {
+		dispatch(getUserGroups());
+	}, [dispatch]);
 
 	switch (subpage) {
 		case undefined:
@@ -13,6 +22,8 @@ export default function SettingsPages() {
 		case 'new':
 			return <UserNew />;
 
+		case 'edit':
+			return <UserEdit />;
 		default:
 			return null;
 	}

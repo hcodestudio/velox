@@ -20,10 +20,14 @@ export const usersSlice = createSlice({
 		saveUsers: (state, action) => {
 			state.users = [...action.payload];
 		},
+		saveUserGroups: (state, action) => {
+			state.userGroups = [...action.payload];
+		},
 	},
 });
 
 // Action creators are generated for each case reducer function
-export const { setCurrentUser, saveUser, saveUsers } = usersSlice.actions;
+export const { setCurrentUser, saveUser, saveUsers, saveUserGroups } =
+	usersSlice.actions;
 
 export default usersSlice.reducer;

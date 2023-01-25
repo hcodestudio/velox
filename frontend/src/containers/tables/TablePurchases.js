@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 
-import Table from '../../components/Table';
+import Table from '../../components/tables/Table';
 import useTable from '../../hooks/useTable';
 import { formatDate, fuzzySort, convertToTitle } from '../../utilities';
 

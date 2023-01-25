@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { FormPurchaseEdit } from '../../../components/FormPurchaseEdit';
-import { FormPurchaseNew } from '../../../components/FormPurchaseNew';
+import { FormEditPurchase } from '../../../components/forms/FormEditPurchase';
+import { FormNewPurchase } from '../../../components/forms/FormNewPurchase';
 import {
 	getItemsByPurchaseId,
 	getPurchaseById,
@@ -26,9 +26,9 @@ export default function PurchaseEdit() {
 	return (
 		<div className="container mx-auto mt-30">
 			{defaultValues ? (
-				<FormPurchaseEdit defaultValues={defaultValues} />
+				<FormEditPurchase defaultValues={defaultValues} />
 			) : (
-				<FormPurchaseNew />
+				<FormNewPurchase />
 			)}
 		</div>
 	);

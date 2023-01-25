@@ -6,17 +6,17 @@ import { Toaster, toast } from 'react-hot-toast';
 import { HiPlus, HiTrash } from 'react-icons/hi2';
 import { AiFillLike } from 'react-icons/ai';
 
-import { Tab, Tabs, TabContent, TabPanel } from './tabs';
-import InputError from './InputError';
-import { currentDateTime, convertToTitle, formatDate } from '../utilities';
+import { Tab, Tabs, TabContent, TabPanel } from '../tabs';
+import InputError from '../InputError';
+import { currentDateTime, convertToTitle, formatDate } from '../../utilities';
 
 import {
 	approvePurchaseRequest,
 	createPurchaseRequest,
 	updatePurchase,
-} from '../store/actions/requests';
+} from '../../store/actions/requests';
 
-export function FormPurchaseEdit({ defaultValues }) {
+export function FormEditPurchase({ defaultValues }) {
 	const dispatch = useDispatch();
 	const now = currentDateTime();
 	const [totalCost, setTotalCost] = useState(null);
