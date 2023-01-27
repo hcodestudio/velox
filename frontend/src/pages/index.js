@@ -10,8 +10,8 @@ import Settings from './settings';
 
 export default function Pages() {
 	const currentUser = useSelector((state) => state.users.currentUser);
-
 	const { page } = useParams();
+
 	let content = '';
 
 	switch (page) {

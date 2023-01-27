@@ -11,10 +11,10 @@ import InputError from '../InputError';
 import UserPermissions from '../UserPermissions';
 import UserGroups from '../UserGroups';
 import config from '../../config/userpermissions.json';
-import { createUser } from '../../store/actions/users';
+import { createUser, updateUser } from '../../store/actions/users';
 import { currentDateTime } from '../../utilities';
 
-export default function UserNew({ user }) {
+export default function FormUserNew({ user }) {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const now = currentDateTime();
@@ -61,23 +61,28 @@ export default function UserNew({ user }) {
 
 		let res = null;
 
-		if (Object.keys(defaultValues).length === 0) {
+		const isNewUser =
+			Object.keys(defaultValues).length === 0 ? true : false;
+
+		if (isNewUser) {
 			// save user
 			res = dispatch(createUser(data));
 		} else {
 			// update user
-			// res = dispatch(createUser(data));
+			res = dispatch(updateUser(data));
 		}
-		console.log({ data, defaultValues });
-		// const res = dispatch(createUser(data));
 
 		toast.promise(res, {
-			loading: 'Saving user...',
+			loading: `${isNewUser ? 'Saving' : 'Updating'} user...`,
 			success: () => {
 				setSuccess(true);
-				return <p>Successfully added user.</p>;
+				return (
+					<p>{`Successfully ${
+						isNewUser ? 'added' : 'updated'
+					} user.`}</p>
+				);
 			},
-			error: <b>Could not add user.</b>,
+			error: <b>{`Could not ${isNewUser ? 'add' : 'update'} user.`}</b>,
 		});
 	};
 

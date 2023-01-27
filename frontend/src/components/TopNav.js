@@ -9,7 +9,9 @@ import { removeUserSession } from '../store/actions/users';
 export default function TopNav() {
 	const history = useHistory();
 	const dispatch = useDispatch();
-	const { firstName } = useSelector((state) => state.users.currentUser);
+	const { firstName, jobTitle } = useSelector(
+		(state) => state.users.currentUser
+	);
 
 	let profileMenuRef = useRef(null);
 	let btnProfileMenuRef = useRef(null);
@@ -86,12 +88,13 @@ export default function TopNav() {
 					<div className="mx-auto px-15 md:px-0 flex items-center justify-between flex-wrap h-full">
 						<Crumbs />
 						<div className="bg-linkwater-dark w-full h-full hidden flex-grow justify-between lg:flex lg:items-center lg:w-auto">
-							<div className="h-full relative z-60 ml-auto w-150">
+							<div className="h-full relative z-60 ml-auto">
 								<button
 									className="text-black text-14 flex bg-linkwater-dark items-center w-full h-full justify-end pr-20"
 									ref={btnProfileMenuRef}
 									onClick={profileToggleMenu}>
 									<span className="mr-5">{`${firstName}`}</span>
+									<span className="mr-5 text-12">{`(${jobTitle})`}</span>
 								</button>
 							</div>
 							<div className="h-full relative z-50">

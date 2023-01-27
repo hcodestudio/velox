@@ -19,12 +19,12 @@ export const requestsSlice = createSlice({
 				(p) => p.id === Number(action.payload.id)
 			);
 
-			getPurchaseByIdx(state, idx).status = action.payload.status;
+			getPurchaseById(state, idx).status = action.payload.status;
 		},
 	},
 });
 
-export const getPurchaseByIdx = (state, idx) => state.purchases[idx] ?? {};
+export const getPurchaseById = (state, idx) => state.purchases[idx] ?? {};
 
 // Action creators are generated for each case reducer function
 export const { savePurchaseRequest, savePurchases, setPurchaseStatus } =

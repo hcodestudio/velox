@@ -50,7 +50,10 @@ module.exports = {
 					5: 'rgba(15, 98, 254, 0.05)',
 				},
 				bluewood: '#31425b', //
-				botticelli: '#CDD8E4',
+				botticelli: {
+					DEFAULT: '#CDD8E4',
+					50: 'rgba(205,216,228,0.5)',
+				},
 				boulder: '##747474',
 				bridesmaid: '#fee7e5',
 				charade: '#2a3039',
@@ -59,6 +62,7 @@ module.exports = {
 					50: 'rgba(22, 22, 22, 0.5)',
 				},
 				crimson: '#E12D39',
+				crimson2: '#cf1124',
 				dodgerblue: '#408bfc', //
 				dustygray: '#f5f7fa', //
 				emerald: '#45D03E',
@@ -89,6 +93,8 @@ module.exports = {
 					5: 'rgba(118, 199, 32, 0.05)',
 				},
 				mercury: '#e1e1e1',
+				junglegreen: '#27AB83',
+				hotcinnamon: '#CB6E17',
 				mineshaft: {
 					dark: '#262626',
 					DEFAULT: '#393939',

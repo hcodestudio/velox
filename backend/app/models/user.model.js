@@ -128,8 +128,18 @@ User.findUserById = (id, result) => {
 
 User.updateById = (id, user, result) => {
 	sql.query(
-		'UPDATE tutorials SET title = ?, description = ?, published = ? WHERE id = ?',
-		[user.title, user.description, user.published, id],
+		`UPDATE velox_users SET username = ?, firstName = ?, lastName = ?, jobTitle = ?, email = ?, address = ?, admin = ?, dateUpdated = ? WHERE id = ?`,
+		[
+			user.username,
+			user.firstName,
+			user.lastName,
+			user.jobTitle,
+			user.email,
+			user.address,
+			user.admin,
+			user.dateUpdated,
+			id,
+		],
 		(err, res) => {
 			if (err) {
 				console.log('error: ', err);
@@ -193,35 +203,88 @@ User.authenticate = ({ email, password }, result) => {
 
 			if (res.length) {
 				console.log('found user: ', res[0]);
-				result(null, res[0]);
-				return;
-			}
+				let userData = {
+					...res[0],
+					userGroups: [],
+					permissions: [],
+				};
 
-			// not found User with the id
-			result({ kind: 'not_found' }, null);
+				let userGroupIds = [];
+
+				// get usergroups
+				sql.query(
+					`SELECT a.groupId, b.name, b.handle FROM velox_usergroups_users as a INNER JOIN  velox_usergroups as b WHERE a.groupId = b.id AND a.userId = ${userData.id}`,
+					(err, res) => {
+						if (res.length) {
+							userData.userGroups = res.map((group) => {
+								userGroupIds.push(group.groupId);
+
+								return {
+									groupId: group.groupId,
+									name: group.name,
+									handle: group.handle,
+								};
+							});
+
+							if (userGroupIds.length) {
+								const groupIds = userGroupIds.join();
+
+								// get permissions
+								sql.query(
+									`SELECT DISTINCT(a.name), a.* FROM velox_userpermissions as a INNER JOIN velox_userpermissions_usergroups as b WHERE a.id = b.permissionId and b.groupId IN (${groupIds}) ORDER BY a.id`,
+									(err, res) => {
+										if (res.length) {
+											userData.permissions = res;
+
+											result(null, userData);
+											return;
+										} else {
+											result(null, userData);
+											return;
+										}
+									}
+								);
+							} else {
+								result(null, userData);
+								return;
+							}
+						} else {
+							result(null, userData);
+							return;
+						}
+					}
+				);
+			} else {
+				// not found User with the id
+				result({ kind: 'not_found' }, null);
+			}
 		}
 	);
 };
 
 //Encrypting text
 User.encryptPassword = (password) => {
-	let key = crypto.pbkdf2Sync(pwd, salt, iterations, keylen, `sha512`);
-	let iv = crypto.randomBytes(randomDataSize);
-	let c = crypto.createCipheriv('aes-256-cfb', key, iv);
+	return crypto
+		.pbkdf2Sync(password, '12345', 1000, 64, `sha512`)
+		.toString(`hex`);
 
-	let buffers = [c.update(new Buffer(password)), c.final()];
-	return Buffer.concat(buffers).toString('base64');
+	// let key = crypto.pbkdf2Sync(pwd, salt, iterations, keylen, `sha512`);
+	// let iv = crypto.randomBytes(randomDataSize);
+	// let c = crypto.createCipheriv('aes-256-cfb', key, iv);
+
+	// let buffers = [c.update(new Buffer(password)), c.final()];
+	// return Buffer.concat(buffers).toString('base64');
 };
 
-User.decryptPassword = (encrypted) => {
-	let key = crypto.pbkdf2Sync(pwd, salt, iterations, keylen, `sha512`);
-	let iv = crypto.randomBytes(randomDataSize);
-	let c = crypto.createDecipheriv('aes-256-cfb', key, iv);
+// User.decryptPassword = (encrypted) => {
+// 	let key = crypto.pbkdf2Sync(pwd, salt, iterations, keylen, `sha512`);
+// 	let iv = crypto.randomBytes(randomDataSize);
+// 	let c = crypto.createDecipheriv('aes-256-cfb', key, iv);
 
-	let decrypted = c.update(new Buffer(encrypted, 'base64'));
-	c.final();
+// 	let decrypted = c.update(new Buffer(encrypted, 'base64'));
+// 	c.final();
 
-	return decrypted.toString();
-};
+// 	return decrypted.toString();
+// };
 
 module.exports = User;

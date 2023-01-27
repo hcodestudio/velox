@@ -9,9 +9,16 @@ import { getPurchases } from '../../../store/actions/requests';
 
 export default function Purchases() {
 	const dispatch = useDispatch();
-	const { admin, id } = useSelector((state) => state.users.currentUser);
+	const { permissions, admin, id } = useSelector(
+		(state) => state.users.currentUser
+	);
 	const { page, subpage } = useParams();
 	const user = admin ? 'admin' : 'user';
+	const canApprovePRs = permissions
+		? permissions.find((p) => p.name === 'approvePRs')
+			? true
+			: false
+		: false;
 
 	const title = convertToTitle(subpage);
 	const pages = [
@@ -21,8 +28,12 @@ export default function Purchases() {
 	const allPurchases = useSelector((state) => state.requests.purchases);
 
 	useEffect(() => {
-		dispatch(getPurchases({ admin, id }));
-	}, [admin, dispatch, id]);
+		if (admin || canApprovePRs) {
+			dispatch(getPurchases({ admin }));
+		} else {
+			dispatch(getPurchases({ admin, id }));
+		}
+	}, [admin, canApprovePRs, dispatch, id, permissions]);
 
 	return (
 		<>

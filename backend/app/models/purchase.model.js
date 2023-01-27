@@ -1,3 +1,9 @@
+const {
+	queryPurchaseApprovals,
+	queryPurchaseItem,
+	queryInsertApproval,
+} = require('./queries/purchase.js');
+
 const sql = require('./db.js');
 const crypto = require('crypto');
 
@@ -47,25 +53,44 @@ Purchase.insertBulk = (data, result) => {
 };
 
 Purchase.findById = (id, result) => {
-	sql.query(
-		`SELECT requests.*, users.firstName, users.lastName FROM velox_purchase_requests as requests INNER JOIN velox_users as users WHERE requests.id = ${id} AND requests.requestorId = users.id`,
-		(err, res) => {
-			if (err) {
-				console.log('error: ', err);
-				result(err, null);
-				return;
-			}
+	sql.query(queryPurchaseItem(id), (err, res) => {
+		if (err) {
+			console.log('error: ', err);
+			result(err, null);
+			return;
+		}
 
-			if (res.length) {
-				console.log('found purchase: ', res[0]);
-				result(null, res[0]);
-				return;
-			}
+		if (res.length) {
+			console.log('found purchase: ', res[0]);
+			let purchase = {
+				...res[0],
+				approvals: [],
+			};
 
+			// get approval data;
+			sql.query(queryPurchaseApprovals(id), (err, res) => {
+				if (err) {
+					console.log('error: ', err);
+
+					result(err, null);
+					return;
+				}
+
+				if (res.length) {
+					purchase.approvals = res;
+					// get approval data;
+
+					result(null, purchase);
+					return;
+				} else {
+					result(null, purchase);
+				}
+			});
+		} else {
 			// not found Purchase with the id
 			result({ kind: 'not_found' }, null);
 		}
-	);
+	});
 };
 
 Purchase.getAll = (title, result) => {
@@ -94,8 +119,9 @@ Purchase.getAll = (title, result) => {
 
 Purchase.getAllById = (id, result) => {
 	let query =
-		'SELECT a.*, b.firstName, b.lastName FROM velox_purchase_requests a, velox_users b';
+		'SELECT a.*, b.firstName, b.lastName, CONCAT(c.firstName, c.lastName) as requestor FROM velox_purchase_requests a, velox_users b INNER JOIN velox_users c';
 
+	query += ` WHERE a.requestorId = c.id AND`;
 	query += ` WHERE a.requestorId = b.id AND a.requestorId = ${id}`;
 	query += ` ORDER BY a.id DESC`;
 
@@ -151,26 +177,69 @@ Purchase.updateById = (id, purchase, result) => {
 };
 
 Purchase.approveById = (id, purchase, result) => {
-	sql.query(
-		'UPDATE velox_purchase_requests SET status = ?, dateUpdated = ? WHERE id = ?',
-		[purchase.status, purchase.dateUpdated, id],
-		(err, res) => {
-			if (err) {
-				console.log('error: ', err);
-				result(null, err);
-				return;
-			}
+	let data = [purchase.status, purchase.dateUpdated];
 
-			if (res.affectedRows == 0) {
-				// not found Purchase with the id
-				result({ kind: 'not_found' }, null);
-				return;
-			}
+	let query =
+		'UPDATE velox_purchase_requests SET status = ?, dateUpdated = ?';
 
-			console.log('updated purchase: ', { id: id, ...purchase });
-			result(null, { id: id, ...purchase });
+	if (purchase.approverRole == 'finalApproval') {
+		query += `, purchaseNumber = ?`;
+		data.push(`PO-${purchase.id}`);
+	}
+
+	if (purchase.approverRole == 'manager') {
+		query += `, dateApproved = ?`;
+		data.push(purchase.dateUpdated);
+		data[0] = 'approved';
+	}
+
+	query += ` WHERE id = ?`;
+	data.push(id);
+
+	sql.query(query, data, (err, res) => {
+		if (err) {
+			console.log('error: ', err);
+			result(null, err);
+			return;
 		}
-	);
+
+		if (res.affectedRows == 0) {
+			// not found Purchase with the id
+			result({ kind: 'not_found' }, null);
+			return;
+		} else {
+			// update approvals table
+
+			sql.query(
+				`INSERT INTO velox_purchase_requests_approvals (purchaseRequestId, approvedByUserId, dateCreated, dateUpdated) VALUES(${Number(
+					purchase.id
+				)}, ${purchase.approver}, "${purchase.dateCreated}", "${
+					purchase.dateCreated
+				}")`,
+				(err, res) => {
+					if (err) {
+						console.log('error: ', err);
+						result(null, err);
+						return;
+					}
+
+					if (res.affectedRows == 0) {
+						// not found Purchase with the id
+						result({ kind: 'not_found' }, null);
+						return;
+					} else {
+						// update approvals table
+
+						console.log('updated purchase: ', {
+							id: id,
+							...purchase,
+						});
+						result(null, { id: id, ...purchase });
+					}
+				}
+			);
+		}
+	});
 };
 
 Purchase.remove = (id, result) => {

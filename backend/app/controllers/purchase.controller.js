@@ -159,7 +159,7 @@ exports.approve = (req, res) => {
 		});
 	}
 
-	Purchase.approveById(req.params.id, new Purchase(req.body), (err, data) => {
+	Purchase.approveById(req.params.id, req.body, (err, data) => {
 		if (err) {
 			if (err.kind === 'not_found') {
 				res.status(404).send({

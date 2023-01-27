@@ -31,6 +31,18 @@ export const createUser = (data) => async (dispatch) => {
 	}
 };
 
+export const updateUser = (data) => async (dispatch) => {
+	try {
+		const res = await UserService.update(data.id, data);
+
+		dispatch(saveUser(res.data));
+
+		return Promise.resolve(res.data);
+	} catch (err) {
+		return Promise.reject(err);
+	}
+};
+
 export const getUsers = () => async (dispatch) => {
 	try {
 		const res = await UserService.getAll('users');

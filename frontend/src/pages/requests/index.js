@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import Purchases from './purchases/Purchases';
+import Purchases from './purchases';
 import PurchaseEdit from './purchases/PurchaseEdit';
 
 export default function RequestsPages() {

@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { AiOutlinePlus } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { BsCircleFill } from 'react-icons/bs';
 
 import Table from '../../components/tables/Table';
 import useTable from '../../hooks/useTable';
@@ -49,7 +50,22 @@ const TablePurchases = ({ data }) => {
 				sortingFn: fuzzySort,
 			},
 			{
-				accessorFn: (row) => `${convertToTitle(row.status)}`,
+				accessorFn: (row) => (
+					<div className="flex items-center">
+						<BsCircleFill
+							className={`${
+								row.status === 'approved'
+									? 'text-junglegreen'
+									: row.status === 'processing'
+									? 'text-hotcinnamon'
+									: row.status === 'pending'
+									? 'text-white border border-black-70 rounded-full'
+									: 'text-crimson2'
+							} text-10 mr-10`}
+						/>
+						{convertToTitle(row.status)}
+					</div>
+				),
 				id: 'status',
 				header: 'Status',
 				cell: (info) => info.getValue(),

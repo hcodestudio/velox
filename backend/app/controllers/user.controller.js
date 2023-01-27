@@ -101,7 +101,8 @@ exports.findUserById = (req, res) => {
 			}
 		} else {
 			console;
-			const password = User.decryptPassword(data.password);
+			// const password = User.encryptPassword(data.password);
+			const password = data.password;
 
 			res.send({ ...data, password, confirmPassword: password });
 		}
@@ -130,9 +131,18 @@ exports.update = (req, res) => {
 		});
 	}
 
-	console.log(req.body);
+	const user = new User({
+		username: req.body.username,
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+		jobTitle: req.body.jobTitle,
+		email: req.body.email,
+		address: req.body.address,
+		admin: req.body.admin,
+		dateUpdated: req.body.dateUpdated,
+	});
 
-	User.updateById(req.params.id, new User(req.body), (err, data) => {
+	User.updateById(req.params.id, user, (err, data) => {
 		if (err) {
 			if (err.kind === 'not_found') {
 				res.status(404).send({

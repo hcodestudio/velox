@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import FormNewUser from '../../components/forms/FormNewUser';
+import FormEditUser from '../../components/forms/FormEditUser';
 import { getUserById } from '../../store/actions/users';
 
 export default function UserEdit() {
@@ -25,7 +25,7 @@ export default function UserEdit() {
 
 	return (
 		<div className="container mx-auto mt-30 px-15">
-			{user ? <FormNewUser user={user} /> : ''}
+			{user ? <FormEditUser user={user} /> : ''}
 		</div>
 	);
 }

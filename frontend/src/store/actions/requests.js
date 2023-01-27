@@ -22,7 +22,7 @@ export const getPurchases = (data) => async (dispatch) => {
 	try {
 		let res;
 
-		if (data.admin) {
+		if (!data.id) {
 			res = await PurchaseService.getAll();
 		} else {
 			res = await PurchaseService.getAllById(data.id);
