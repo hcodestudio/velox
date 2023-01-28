@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export const initialState = {
 	purchases: [],
+	payments: [],
 };
 
 export const requestsSlice = createSlice({
@@ -21,13 +22,20 @@ export const requestsSlice = createSlice({
 
 			getPurchaseById(state, idx).status = action.payload.status;
 		},
+		savePayments: (state, action) => {
+			state.payments = [...action.payload];
+		},
 	},
 });
 
 export const getPurchaseById = (state, idx) => state.purchases[idx] ?? {};
 
 // Action creators are generated for each case reducer function
-export const { savePurchaseRequest, savePurchases, setPurchaseStatus } =
-	requestsSlice.actions;
+export const {
+	savePurchaseRequest,
+	savePurchases,
+	setPurchaseStatus,
+	savePayments,
+} = requestsSlice.actions;
 
 export default requestsSlice.reducer;

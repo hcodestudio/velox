@@ -5,7 +5,7 @@ import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 import { currentDateTime } from '../utilities';
-import { approvePurchaseRequest } from '../store/actions/requests';
+import { approvePaymentRequest } from '../store/actions/requests';
 
 export default function PurchaseApprovalDetails(props) {
 	const dispatch = useDispatch();
@@ -97,17 +97,17 @@ export default function PurchaseApprovalDetails(props) {
 			approverRole: userGroup.handle,
 		};
 
-		const res = dispatch(approvePurchaseRequest(id, data));
+		const res = dispatch(approvePaymentRequest(id, data));
 
 		toast.promise(res, {
-			loading: `Updating purchase request...`,
+			loading: `Updating payment request...`,
 			success: () => {
 				setTimeout(() => {
 					window.location.reload(false);
 				}, 1500);
-				return <p>{`Successfully updated purchase request.`}</p>;
+				return <p>{`Successfully updated payment request.`}</p>;
 			},
-			error: <b>{`Could not update purchase request.`}</b>,
+			error: <b>{`Could not update payment request.`}</b>,
 		});
 	}
 

@@ -11,7 +11,6 @@ export default function UserPages() {
 	const dispatch = useDispatch();
 	const { subpage } = useSelector((state) => state.pages.current);
 
-	console.log({ subpage });
 	useEffect(() => {
 		dispatch(getUserGroups());
 	}, [dispatch]);

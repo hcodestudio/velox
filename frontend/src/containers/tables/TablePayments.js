@@ -1,0 +1,129 @@
+import { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { BsCircleFill } from 'react-icons/bs';
+
+import Table from '../../components/tables/Table';
+import useTable from '../../hooks/useTable';
+import { formatDate, fuzzySort, convertToTitle } from '../../utilities';
+
+const TablePayments = ({ data }) => {
+	const { page, subpage } = useParams();
+	const { admin } = useSelector((state) => state.users.currentUser);
+	const user = admin ? 'admin' : 'user';
+
+	const columns = useMemo(
+		() => [
+			{
+				accessorFn: (row) => (
+					<Link
+						to={`/${user}/${page}/${subpage}/edit/${row.id}`}
+						className="text-blue-600 hover:underline">{`${row.purpose}`}</Link>
+				),
+				id: 'purpose',
+				header: 'Purpose',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
+			},
+			{
+				accessorFn: (row) => `${row.payee}`,
+				id: 'payee',
+				header: 'Payee',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
+			},
+			{
+				accessorFn: (row) => `${row.requestedBy}`,
+				id: 'requestedBy',
+				header: 'Requested By',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
+			},
+			{
+				accessorFn: (row) => (
+					<div className="flex items-center">
+						<BsCircleFill
+							className={`${
+								row.status === 'approved'
+									? 'text-junglegreen'
+									: row.status === 'processing'
+									? 'text-hotcinnamon'
+									: row.status === 'pending'
+									? 'text-white border border-black-70 rounded-full'
+									: 'text-crimson2'
+							} text-10 mr-10`}
+						/>
+						{convertToTitle(row.status)}
+					</div>
+				),
+				id: 'status',
+				header: 'Status',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
+			},
+			{
+				accessorFn: (row) =>
+					`${formatDate(new Date(row.dateRequired))}`,
+				id: 'dateRequired',
+				header: 'Date Required',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
+			},
+			{
+				accessorFn: (row) => `${formatDate(new Date(row.dateCreated))}`,
+				id: 'dateCreated',
+				header: 'Date Created',
+				cell: (info) => info.getValue(),
+				footer: (props) => props.column.id,
+				filterFn: 'fuzzy',
+				sortingFn: fuzzySort,
+			},
+		],
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
+	);
+
+	const { DebouncedInput, setGlobalFilter, globalFilter, table } = useTable({
+		data,
+		columns,
+	});
+
+	return (
+		<div className="w-full ml-20">
+			<div className="flex items-center mb-20">
+				<div className="w-full">
+					<DebouncedInput
+						value={globalFilter ?? ''}
+						onChange={(value) => setGlobalFilter(String(value))}
+						className="px-24 py-9 font-lg shadow w-full h-35 rounded-md"
+						placeholder="Search"
+					/>
+				</div>
+				<Link
+					to={`/${user}/${page}/${subpage}/new`}
+					className="flex items-center ml-auto bg-crimson text-white rounded-md text-14 px-14 py-7 w-150 ml-10">
+					<AiOutlinePlus className="text-secondary group-hover:hidden mr-5" />
+					New Payment
+				</Link>
+			</div>
+			<div className="p-2">
+				<div className="h-2" />
+				<Table table={table} />
+			</div>
+		</div>
+	);
+};
+
+export default TablePayments;

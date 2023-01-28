@@ -25,7 +25,7 @@ import {
 	updatePurchase,
 } from '../../store/actions/requests';
 
-export function FormEditPurchase({ purchase = {} }) {
+export function FormNewPurchase({ purchase = {} }) {
 	const dispatch = useDispatch();
 	const now = currentDateTime();
 	const [totalCost, setTotalCost] = useState(null);
@@ -55,33 +55,13 @@ export function FormEditPurchase({ purchase = {} }) {
 		getValues,
 		control,
 	} = useForm({
-		defaultValues,
+		defaultValues: {},
 	});
 
 	const { fields, append, remove } = useFieldArray({
 		control,
 		name: 'items',
 	});
-
-	useEffect(() => {
-		if (id && defaultValues) {
-			const items = defaultValues.items;
-			const total = items
-				.reduce(
-					(sum, { estimatedCost }) => sum + Number(estimatedCost),
-					0
-				)
-				.toFixed(2);
-
-			setTotalCost(total);
-		}
-	}, [defaultValues, purchase, id]);
-
-	useEffect(() => {
-		if (purchase) {
-			setDefaultValues(purchase);
-		}
-	}, [purchase]);
 
 	const onSubmit = (formData) => {
 		let data = {
@@ -93,8 +73,6 @@ export function FormEditPurchase({ purchase = {} }) {
 			data.requestorId = currentUser.id;
 			data.dateCreated = now;
 		}
-
-		console.log({ data });
 
 		let res;
 
@@ -582,15 +560,6 @@ export function FormEditPurchase({ purchase = {} }) {
 					{...defaultValues}
 					total={totalCost}
 					status={getValues('status')}
-				/>
-
-				<PurchaseApprovalDetails
-					{...defaultValues}
-					total={totalCost}
-					status={getValues('status')}
-					notice={notice}
-					setNotice={setNotice}
-					isEditable={isEditable}
 				/>
 			</div>
 			<Toaster position="top-center" reverseOrder={false} />

@@ -3,15 +3,9 @@ import { useSelector } from 'react-redux';
 
 import { convertToTitle, formatDate } from '../utilities';
 
-export default function PurchaseDetails(props) {
-	const {
-		total,
-		status,
-		requestor,
-		dateUpdated,
-		dateCreated,
-		purchaseNumber,
-	} = props;
+export default function PaymentDetails(props) {
+	const { total, status, requestor, dateUpdated, dateCreated, rfpNumber } =
+		props;
 
 	const { edit } = useSelector((state) => state.pages.current);
 
@@ -42,24 +36,17 @@ export default function PurchaseDetails(props) {
 			</div>
 
 			{edit !== 'new' ? (
-				<>
-					<div className="flex items-center border-b border-botticelli px-32 py-10">
-						<div className="w-3/5 font-semibold">Status</div>
-						<div className="w-2/5 flex items-center">
-							<BsCircleFill
-								className={`${statusColor} text-10 mr-10`}
-							/>
-							<span className="text-14">
-								{convertToTitle(status)}
-							</span>
-						</div>
+				<div className="flex items-center border-b border-botticelli px-32 py-10">
+					<div className="w-3/5 font-semibold">Status</div>
+					<div className="w-2/5 flex items-center">
+						<BsCircleFill
+							className={`${statusColor} text-10 mr-10`}
+						/>
+						<span className="text-14">
+							{convertToTitle(status)}
+						</span>
 					</div>
-
-					<div className="flex items-center px-32 py-10 border-b border-botticelli">
-						<div className="w-3/5 font-semibold">Requested by</div>
-						<div className="w-2/5">{requestor}</div>
-					</div>
-				</>
+				</div>
 			) : (
 				''
 			)}
@@ -87,7 +74,7 @@ export default function PurchaseDetails(props) {
 					</div>
 					<div className="flex items-center px-32 py-10">
 						<div className="w-3/5 font-semibold">P.O. Number</div>
-						<div className="w-2/5">{`${purchaseNumber}`}</div>
+						<div className="w-2/5">{`${rfpNumber}`}</div>
 					</div>
 				</>
 			)}

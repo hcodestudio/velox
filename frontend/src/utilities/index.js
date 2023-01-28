@@ -11,9 +11,7 @@ export const convertToTitle = (str = '') => {
 	return arr.join(' ');
 };
 
-export const currentDateTime = () => {
-	let today = new Date();
-
+export const currentDateTime = (today = new Date()) => {
 	// current date
 	// adjust 0 before single digit date
 	let date = ('0' + today.getDate()).slice(-2);

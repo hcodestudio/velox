@@ -1,9 +1,9 @@
-import { FormEditPurchase } from '../../../components/forms/FormEditPurchase';
+import { FormNewPurchase } from '../../../components/forms/FormNewPurchase';
 
-export default function PurchaseEdit() {
+export default function PurchaseNew() {
 	return (
-		<div className="container mx-auto mt-30">
-			<FormEditPurchase />
+		<div className="container mx-auto mt-30 px-15">
+			<FormNewPurchase />
 		</div>
 	);
 }

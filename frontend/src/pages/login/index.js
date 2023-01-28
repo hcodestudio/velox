@@ -17,7 +17,6 @@ export default function Login() {
 
 	useEffect(() => {
 		if (currentUser.id) {
-			console.log({ currentUser });
 			if (currentUser.admin) {
 				history.push('/admin/dashboard');
 			} else {
